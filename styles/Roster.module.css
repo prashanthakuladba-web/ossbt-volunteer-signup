@@ -1,0 +1,35 @@
+.container { max-width: 860px; margin: 0 auto; padding: 2rem; }
+
+.topBar { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+.back { font-size: 0.85rem; color: #888; display: block; margin-bottom: 0.4rem; }
+.back:hover { color: #4a6cf7; }
+.topBar h1 { margin-bottom: 0.2rem; }
+.meta { font-size: 0.85rem; color: #666; }
+
+.topActions { display: flex; align-items: center; gap: 0.75rem; }
+.totalBadge { font-size: 0.8rem; font-weight: 600; background: #f0f4ff; color: #4a6cf7; padding: 0.3rem 0.75rem; border-radius: 20px; }
+
+.exportBtn {
+  padding: 0.5rem 1rem;
+  background: #fff;
+  border: 1px solid #d0d5e8;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #444;
+}
+.exportBtn:hover { background: #f0f4ff; color: #4a6cf7; border-color: #4a6cf7; }
+
+.slotSection { margin-bottom: 2rem; }
+.slotHeader { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+.slotHeader h2 { font-size: 1.05rem; }
+.slotMeta { font-size: 0.85rem; color: #4a6cf7; }
+.capacityBadge { font-size: 0.8rem; font-weight: 600; background: #f0f4ff; color: #555; padding: 0.2rem 0.6rem; border-radius: 20px; margin-left: auto; }
+
+.noSignups { font-size: 0.875rem; color: #aaa; padding: 0.5rem 0; }
+
+.table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid #e8ecf4; border-radius: 10px; overflow: hidden; }
+.table th { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #888; background: #f8f9fc; padding: 0.6rem 1rem; border-bottom: 1px solid #e8ecf4; }
+.table td { padding: 0.7rem 1rem; border-bottom: 1px solid #f0f4ff; font-size: 0.9rem; }
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: #fafbff; }

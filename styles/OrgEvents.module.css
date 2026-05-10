@@ -1,0 +1,72 @@
+.container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+.topBar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+
+.createBtn {
+  padding: 0.55rem 1.1rem;
+  background: #4a6cf7;
+  color: #fff !important;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none !important;
+}
+.createBtn:hover { background: #3a5ce5; }
+
+.list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  background: #fff;
+  border: 1px solid #e8ecf4;
+  border-radius: 12px;
+  padding: 1.1rem 1.25rem;
+  flex-wrap: wrap;
+}
+
+.eventTitle { font-weight: 600; font-size: 1rem; display: block; margin-bottom: 0.2rem; }
+.meta { font-size: 0.8rem; color: #888; }
+
+.rowActions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+
+.badgePublished { font-size: 0.75rem; font-weight: 600; background: #dcfce7; color: #16a34a; padding: 0.2rem 0.6rem; border-radius: 20px; }
+.badgeDraft     { font-size: 0.75rem; font-weight: 600; background: #fef9c3; color: #854d0e; padding: 0.2rem 0.6rem; border-radius: 20px; }
+
+.actionBtn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #d0d5e8;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 0.8rem;
+  color: #444;
+  transition: background 0.2s;
+  text-decoration: none !important;
+}
+.actionBtn:hover { background: #f0f4ff; color: #4a6cf7; border-color: #4a6cf7; }
+
+.copyLinkBtn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #a5b4fc;
+  border-radius: 6px;
+  background: #eef2ff;
+  font-size: 0.8rem;
+  color: #4a6cf7;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.copyLinkBtn:hover { background: #e0e9ff; }
+
+.deleteBtn {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #fca5a5;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 0.8rem;
+  color: #dc2626;
+}
+.deleteBtn:hover { background: #fee2e2; }
+
+.empty { text-align: center; padding: 3rem; color: #777; }

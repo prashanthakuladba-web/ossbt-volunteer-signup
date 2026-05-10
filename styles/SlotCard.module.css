@@ -1,0 +1,48 @@
+.card {
+  background: #fff;
+  border: 1px solid #e8ecf4;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+.title { font-size: 1rem; font-weight: 600; margin-bottom: 0.15rem; }
+.time  { font-size: 0.875rem; color: #4a6cf7; }
+.desc  { font-size: 0.85rem; color: #666; margin-top: 0.3rem; }
+
+.capacity { text-align: right; }
+.open { font-size: 0.8rem; font-weight: 600; color: #16a34a; background: #dcfce7; padding: 0.2rem 0.6rem; border-radius: 20px; }
+.full { font-size: 0.8rem; font-weight: 600; color: #dc2626; background: #fee2e2; padding: 0.2rem 0.6rem; border-radius: 20px; }
+
+.bar { height: 6px; background: #e8ecf4; border-radius: 3px; margin-bottom: 0.25rem; overflow: hidden; }
+.barFill { height: 100%; background: #4a6cf7; border-radius: 3px; transition: width 0.4s; }
+.barLabel { font-size: 0.75rem; color: #888; margin-bottom: 0.85rem; }
+
+.signupBtn {
+  width: 100%;
+  padding: 0.6rem;
+  background: #4a6cf7;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.signupBtn:hover:not(:disabled) { background: #3a5ce5; }
+.signupBtn:disabled { opacity: 0.55; cursor: default; }
+
+.cancelBtn {
+  width: 100%;
+  padding: 0.6rem;
+  background: #fff;
+  color: #dc2626;
+  border: 1px solid #dc2626;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.cancelBtn:hover:not(:disabled) { background: #fff0f0; }
+.cancelBtn:disabled { opacity: 0.55; cursor: default; }

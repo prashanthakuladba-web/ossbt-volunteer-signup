@@ -1,0 +1,32 @@
+.container { max-width: 560px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.dashLink {
+  padding: 0.6rem 1.25rem;
+  background: #4a6cf7;
+  color: #fff !important;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none !important;
+}
+.dashLink:hover { background: #3a5ce5; }
+
+.homeLink {
+  padding: 0.6rem 1.25rem;
+  background: #fff;
+  color: #444 !important;
+  border: 1px solid #d0d5e8;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none !important;
+}
+.homeLink:hover { background: #f0f4ff; }
