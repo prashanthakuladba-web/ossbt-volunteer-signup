@@ -14,6 +14,7 @@ function Roster() {
   const [slots, setSlots] = useState([]);
   const [signupsBySlot, setSignupsBySlot] = useState({});
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     if (!id) return;
@@ -42,6 +43,22 @@ function Roster() {
     }
     load();
   }, [id]);
+
+  async function handleDelete(slotId, signupId) {
+    if (!window.confirm('Remove this volunteer signup?')) return;
+    setDeletingId(signupId);
+    const { data: { session } } = await supabase.auth.getSession();
+    const res = await fetch(`/api/signups/${signupId}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${session.access_token}` },
+    });
+    setDeletingId(null);
+    if (!res.ok) { alert('Failed to remove signup.'); return; }
+    setSignupsBySlot(prev => ({
+      ...prev,
+      [slotId]: prev[slotId].filter(sg => sg.id !== signupId),
+    }));
+  }
 
   function exportCSV() {
     const rows = [['Slot', 'Time', 'Email', 'Phone']];
@@ -101,7 +118,7 @@ function Roster() {
                 ) : (
                   <table className={styles.table}>
                     <thead>
-                      <tr><th>#</th><th>Email</th><th>Phone</th></tr>
+                      <tr><th>#</th><th>Email</th><th>Phone</th><th></th></tr>
                     </thead>
                     <tbody>
                       {sgs.map((sg, i) => (
@@ -109,6 +126,15 @@ function Roster() {
                           <td>{i + 1}</td>
                           <td>{sg.email || '—'}</td>
                           <td>{sg.phone || '—'}</td>
+                          <td>
+                            <button
+                              className={styles.deleteBtn}
+                              onClick={() => handleDelete(slot.id, sg.id)}
+                              disabled={deletingId === sg.id}
+                            >
+                              {deletingId === sg.id ? '…' : 'Remove'}
+                            </button>
+                          </td>
                         </tr>
                       ))}
                     </tbody>

@@ -14,13 +14,23 @@ export default async function handler(req, res) {
   const { data: { user }, error: authErr } = await supabaseUser.auth.getUser();
   if (authErr || !user) return res.status(401).json({ error: 'Not authenticated' });
 
+  const { data: profile } = await supabaseUser
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+
+  if (!profile || profile.role !== 'organizer') {
+    return res.status(403).json({ error: 'Access denied.' });
+  }
+
   const { signupId } = req.query;
 
+  // RLS UPDATE policy verifies this signup belongs to the organizer's event
   const { error } = await supabaseUser
     .from('signups')
     .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
-    .eq('id', signupId)
-    .eq('volunteer_id', user.id); // RLS + explicit check
+    .eq('id', signupId);
 
   if (error) return res.status(500).json({ error: error.message });
   return res.status(200).json({ ok: true });

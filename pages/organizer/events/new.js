@@ -7,11 +7,24 @@ import styles from '../../../styles/OrgNew.module.css';
 
 const emptySlot = () => ({ start_time: '', end_time: '', max_capacity: 1 });
 
+const DEFAULT_TIMES = {
+  1: [{ start_time: '17:00', end_time: '20:30', max_capacity: 1 }],
+  3: [
+    { start_time: '09:00', end_time: '12:00', max_capacity: 1 },
+    { start_time: '13:00', end_time: '16:00', max_capacity: 1 },
+    { start_time: '17:00', end_time: '20:00', max_capacity: 1 },
+  ],
+};
+
+function defaultSlots(count) {
+  return DEFAULT_TIMES[count] ?? Array(count).fill(null).map(emptySlot);
+}
+
 function NewEvent() {
   const router = useRouter();
   const [form, setForm] = useState({ title: '', event_date: '' });
   const [numSlots, setNumSlots] = useState(3);
-  const [slots, setSlots] = useState([emptySlot(), emptySlot(), emptySlot()]);
+  const [slots, setSlots] = useState(defaultSlots(3));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [createdEvent, setCreatedEvent] = useState(null);
@@ -23,12 +36,7 @@ function NewEvent() {
   function handleNumSlotsChange(value) {
     const count = Math.max(1, parseInt(value) || 1);
     setNumSlots(count);
-    setSlots(prev => {
-      if (count > prev.length) {
-        return [...prev, ...Array(count - prev.length).fill(null).map(emptySlot)];
-      }
-      return prev.slice(0, count);
-    });
+    setSlots(defaultSlots(count));
   }
 
   function setSlotField(idx, field, value) {

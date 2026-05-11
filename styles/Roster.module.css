@@ -33,3 +33,16 @@
 .table td { padding: 0.7rem 1rem; border-bottom: 1px solid #f0f4ff; font-size: 0.9rem; }
 .table tr:last-child td { border-bottom: none; }
 .table tr:hover td { background: #fafbff; }
+
+.deleteBtn {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #c0392b;
+  background: #fff;
+  border: 1px solid #f0c0bb;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.deleteBtn:hover:not(:disabled) { background: #fff0ee; border-color: #c0392b; }
+.deleteBtn:disabled { opacity: 0.5; cursor: default; }
