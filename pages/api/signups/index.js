@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
-import { formatSlotTime } from '../../../lib/helpers';
+import { formatSlotTime, formatDate } from '../../../lib/helpers';
+import { sendVolunteerConfirmation, sendOrganizerNotification } from '../../../lib/email';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
@@ -16,7 +17,7 @@ export default async function handler(req, res) {
 
   const { data: slot } = await supabase
     .from('slots')
-    .select('*, events(*)')
+    .select('*, events(*, profiles(email))')
     .eq('id', slotId)
     .single();
 
@@ -67,9 +68,33 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: insertErr.message });
   }
 
+  const slotTime = formatSlotTime(slot.start_time, slot.end_time);
+  const formattedDate = formatDate(slot.events.event_date);
+  const emailPayload = {
+    eventTitle: slot.events.title,
+    formattedDate,
+    location: slot.events.location || '',
+    slotTitle: slot.title,
+    slotTime,
+  };
+
+  if (process.env.RESEND_API_KEY) {
+    const organizerEmail = slot.events.profiles?.email;
+    await Promise.allSettled([
+      sendVolunteerConfirmation(email.toLowerCase().trim(), emailPayload),
+      organizerEmail
+        ? sendOrganizerNotification(organizerEmail, {
+            ...emailPayload,
+            volunteerEmail: email.toLowerCase().trim(),
+            volunteerPhone: phone.trim(),
+          })
+        : Promise.resolve(),
+    ]);
+  }
+
   return res.status(201).json({
     signup_id: signup.id,
     event_title: slot.events.title,
-    slot_time: formatSlotTime(slot.start_time, slot.end_time),
+    slot_time: slotTime,
   });
 }
