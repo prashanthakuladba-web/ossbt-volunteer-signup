@@ -9,7 +9,7 @@
   content: '';
   position: fixed;
   inset: 0;
-  background: url('/watermark.png') center 90% / 30% auto no-repeat;
+  background: url('/watermark.png') center 90% / 21% auto no-repeat;
   opacity: 0.50;
   pointer-events: none;
   z-index: 0;
