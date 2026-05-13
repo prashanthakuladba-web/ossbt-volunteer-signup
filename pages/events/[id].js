@@ -41,6 +41,7 @@ export default function EventSignup() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (!form.slotId) { setError('Please select a slot.'); return; }
+    if (form.phone.length !== 10) { setError('Phone number must be exactly 10 digits.'); return; }
     setSubmitting(true);
     setError('');
 
@@ -104,10 +105,15 @@ export default function EventSignup() {
                 type="tel"
                 required
                 value={form.phone}
-                onChange={e => setField('phone', e.target.value)}
-                placeholder="555-123-4567"
+                onChange={e => setField('phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
+                placeholder="5551234567"
+                maxLength={10}
+                inputMode="numeric"
                 className={styles.fieldInput}
               />
+              {form.phone.length > 0 && form.phone.length < 10 && (
+                <span className={styles.fieldHint}>{10 - form.phone.length} digit{10 - form.phone.length !== 1 ? 's' : ''} remaining</span>
+              )}
             </label>
           </section>
 

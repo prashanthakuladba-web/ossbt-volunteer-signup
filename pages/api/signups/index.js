@@ -9,6 +9,8 @@ export default async function handler(req, res) {
   if (!slotId) return res.status(400).json({ error: 'slotId is required' });
   if (!email) return res.status(400).json({ error: 'email is required' });
   if (!phone) return res.status(400).json({ error: 'phone is required' });
+  const digitsOnly = phone.trim().replace(/\D/g, '');
+  if (digitsOnly.length !== 10) return res.status(400).json({ error: 'Phone number must be exactly 10 digits.' });
 
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,

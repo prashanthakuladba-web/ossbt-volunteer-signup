@@ -38,6 +38,7 @@
   color: #222;
 }
 .fieldInput:focus { outline: 2px solid #4a6cf7; border-color: transparent; background: #fff; }
+.fieldHint { font-size: 0.75rem; font-weight: 400; color: #888; }
 
 /* Slot options */
 .slotOptions { display: flex; flex-direction: column; gap: 0.6rem; }
