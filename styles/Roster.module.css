@@ -34,6 +34,19 @@
 .table tr:last-child td { border-bottom: none; }
 .table tr:hover td { background: #fafbff; }
 
+.checkoutBtn {
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #15803d;
+  background: #fff;
+  border: 1px solid #86efac;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.checkoutBtn:hover:not(:disabled) { background: #f0fdf4; border-color: #15803d; }
+.checkoutBtn:disabled { opacity: 0.5; cursor: default; }
+
 .deleteBtn {
   padding: 0.25rem 0.6rem;
   font-size: 0.8rem;

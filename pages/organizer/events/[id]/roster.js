@@ -15,6 +15,7 @@ function Roster() {
   const [signupsBySlot, setSignupsBySlot] = useState({});
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
+  const [checkingOutId, setCheckingOutId] = useState(null);
 
   useEffect(() => {
     if (!id) return;
@@ -43,6 +44,26 @@ function Roster() {
     }
     load();
   }, [id]);
+
+  async function handleManualCheckout(slotId, signupId) {
+    setCheckingOutId(signupId);
+    const res = await fetch('/api/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ signupId }),
+    });
+    const data = await res.json();
+    setCheckingOutId(null);
+    if (!res.ok) { alert(data.error || 'Checkout failed.'); return; }
+    setSignupsBySlot(prev => ({
+      ...prev,
+      [slotId]: prev[slotId].map(sg =>
+        sg.id === signupId
+          ? { ...sg, checked_out_at: new Date().toISOString(), total_minutes: data.total_minutes }
+          : sg
+      ),
+    }));
+  }
 
   async function handleDelete(slotId, signupId) {
     if (!window.confirm('Remove this volunteer signup?')) return;
@@ -147,7 +168,16 @@ function Roster() {
                           <td>{formatTime(sg.checked_in_at)}</td>
                           <td>{formatTime(sg.checked_out_at)}</td>
                           <td>{formatTotalTime(sg.total_minutes)}</td>
-                          <td>
+                          <td style={{ display: 'flex', gap: '0.4rem' }}>
+                            {sg.checked_in_at && !sg.checked_out_at && (
+                              <button
+                                className={styles.checkoutBtn}
+                                onClick={() => handleManualCheckout(slot.id, sg.id)}
+                                disabled={checkingOutId === sg.id}
+                              >
+                                {checkingOutId === sg.id ? '…' : 'Check out'}
+                              </button>
+                            )}
                             <button
                               className={styles.deleteBtn}
                               onClick={() => handleDelete(slot.id, sg.id)}
