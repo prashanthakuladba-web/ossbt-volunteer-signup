@@ -9,8 +9,8 @@
   content: '';
   position: fixed;
   inset: 0;
-  background: url('/watermark.png') center center / 30% auto no-repeat;
-  opacity: 0.25;
+  background: url('/watermark.png') center 70% / 30% auto no-repeat;
+  opacity: 0.35;
   pointer-events: none;
   z-index: 0;
 }
