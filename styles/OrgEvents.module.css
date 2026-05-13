@@ -70,3 +70,58 @@
 .deleteBtn:hover { background: #fee2e2; }
 
 .empty { text-align: center; padding: 3rem; color: #777; }
+
+.qrBtn {
+  padding: 0.55rem 1.1rem;
+  background: #fff;
+  border: 1px solid #a5b4fc;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #4a6cf7;
+  cursor: pointer;
+}
+.qrBtn:hover { background: #eef2ff; }
+
+.qrSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: #f8f9fc;
+  border: 1px solid #e8ecf4;
+  border-radius: 16px;
+}
+
+.qrBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e8ecf4;
+}
+
+.qrLabel { font-weight: 700; font-size: 1rem; color: #1a1a2e; margin: 0; }
+.qrSub { font-size: 0.8rem; color: #888; margin: 0; }
+
+.printBtn {
+  padding: 0.55rem 1.5rem;
+  background: #1a1a2e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.printBtn:hover { background: #2d2d4e; }
+
+@media print {
+  body > * { display: none !important; }
+  #qr-print-area { display: flex !important; flex-direction: column; align-items: center; gap: 0.75rem; padding: 3rem; }
+}

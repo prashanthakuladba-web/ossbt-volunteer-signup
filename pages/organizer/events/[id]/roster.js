@@ -31,7 +31,7 @@ function Roster() {
         const slotIds = slotList.map(s => s.id);
         const { data: sg } = await supabase
           .from('signups')
-          .select('id, slot_id, email, phone, signed_up_at, status')
+          .select('id, slot_id, email, phone, signed_up_at, status, checked_in_at, checked_out_at, total_minutes')
           .in('slot_id', slotIds)
           .eq('status', 'confirmed');
         const bySlot = {};
@@ -60,8 +60,21 @@ function Roster() {
     }));
   }
 
+  function formatTime(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleTimeString('en-US', {
+      hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'America/New_York',
+    });
+  }
+
+  function formatTotalTime(minutes) {
+    if (minutes == null) return '—';
+    const hrs = minutes / 60;
+    return Number.isInteger(hrs) ? `${hrs} hr${hrs !== 1 ? 's' : ''}` : `${hrs} hrs`;
+  }
+
   function exportCSV() {
-    const rows = [['Slot', 'Time', 'Email', 'Phone']];
+    const rows = [['Slot', 'Time', 'Email', 'Phone', 'Checked In', 'Checked Out', 'Total Time']];
     slots.forEach(slot => {
       (signupsBySlot[slot.id] || []).forEach(sg => {
         rows.push([
@@ -69,6 +82,9 @@ function Roster() {
           formatSlotTime(slot.start_time, slot.end_time),
           sg.email || '',
           sg.phone || '',
+          formatTime(sg.checked_in_at),
+          formatTime(sg.checked_out_at),
+          formatTotalTime(sg.total_minutes),
         ]);
       });
     });
@@ -118,7 +134,7 @@ function Roster() {
                 ) : (
                   <table className={styles.table}>
                     <thead>
-                      <tr><th>#</th><th>Email</th><th>Phone</th><th></th></tr>
+                      <tr><th>#</th><th>Email</th><th>Phone</th><th>Checked In</th><th>Checked Out</th><th>Total Time</th><th></th></tr>
                     </thead>
                     <tbody>
                       {sgs.map((sg, i) => (
@@ -126,6 +142,9 @@ function Roster() {
                           <td>{i + 1}</td>
                           <td>{sg.email || '—'}</td>
                           <td>{sg.phone || '—'}</td>
+                          <td>{formatTime(sg.checked_in_at)}</td>
+                          <td>{formatTime(sg.checked_out_at)}</td>
+                          <td>{formatTotalTime(sg.total_minutes)}</td>
                           <td>
                             <button
                               className={styles.deleteBtn}

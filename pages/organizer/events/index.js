@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Layout from '../../../components/Layout';
 import ProtectedRoute from '../../../components/ProtectedRoute';
@@ -6,10 +7,14 @@ import { supabase } from '../../../lib/supabase';
 import { formatDate } from '../../../lib/helpers';
 import styles from '../../../styles/OrgEvents.module.css';
 
+const QRCodeSVG = dynamic(() => import('qrcode.react').then(m => m.QRCodeSVG), { ssr: false });
+const CHECKIN_URL = 'https://ossbt-volunteers.org/checkin';
+
 function OrganizerEvents() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState(null);
+  const [showQR, setShowQR] = useState(false);
 
   function copyLink(eventId) {
     const link = `${window.location.origin}/events/${eventId}`;
@@ -52,8 +57,24 @@ function OrganizerEvents() {
       <div className={styles.container}>
         <div className={styles.topBar}>
           <h1>All events</h1>
-          <Link href="/organizer/events/new" className={styles.createBtn}>+ Create event</Link>
+          <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <button onClick={() => setShowQR(v => !v)} className={styles.qrBtn}>
+              {showQR ? 'Hide QR Code' : 'Check-in QR Code'}
+            </button>
+            <Link href="/organizer/events/new" className={styles.createBtn}>+ Create event</Link>
+          </div>
         </div>
+
+        {showQR && (
+          <div className={styles.qrSection}>
+            <div className={styles.qrBox} id="qr-print-area">
+              <QRCodeSVG value={CHECKIN_URL} size={200} />
+              <p className={styles.qrLabel}>OSSBT Volunteers — Check In / Out</p>
+              <p className={styles.qrSub}>Scan to check in or check out</p>
+            </div>
+            <button onClick={() => window.print()} className={styles.printBtn}>Print QR Code</button>
+          </div>
+        )}
 
         {loading ? (
           <p>Loading…</p>
