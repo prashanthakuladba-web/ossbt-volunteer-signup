@@ -7,6 +7,10 @@
 
 .logo { width: 100% !important; max-width: 3520px; height: auto !important; margin-bottom: 1rem; object-fit: contain; }
 
+@media (max-width: 768px) {
+  .logo { width: 100vw !important; margin-left: -2rem; margin-right: -2rem; }
+}
+
 .hero h1 { font-size: 2rem; margin-bottom: 0.5rem; color: #1a1a2e; }
 .hero p  { color: #555; margin-bottom: 1.25rem; }
 
