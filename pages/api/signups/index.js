@@ -5,8 +5,9 @@ import { sendVolunteerConfirmation, sendOrganizerNotification } from '../../../l
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { slotId, email, phone } = req.body;
+  const { slotId, name, email, phone } = req.body;
   if (!slotId) return res.status(400).json({ error: 'slotId is required' });
+  if (!name) return res.status(400).json({ error: 'name is required' });
   if (!email) return res.status(400).json({ error: 'email is required' });
   if (!phone) return res.status(400).json({ error: 'phone is required' });
   const digitsOnly = phone.trim().replace(/\D/g, '');
@@ -56,6 +57,7 @@ export default async function handler(req, res) {
     .from('signups')
     .insert({
       slot_id: slotId,
+      name: name.trim(),
       email: email.toLowerCase().trim(),
       phone: phone.trim(),
       volunteer_id: null,

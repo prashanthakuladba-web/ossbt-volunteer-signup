@@ -12,7 +12,7 @@ export default function EventSignup() {
   const [event, setEvent] = useState(null);
   const [slots, setSlots] = useState([]);
   const [signupCounts, setSignupCounts] = useState({});
-  const [form, setForm] = useState({ email: '', phone: '', slotId: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', slotId: '' });
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -48,7 +48,7 @@ export default function EventSignup() {
     const res = await fetch('/api/signups', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ slotId: form.slotId, email: form.email, phone: form.phone }),
+      body: JSON.stringify({ slotId: form.slotId, name: form.name, email: form.email, phone: form.phone }),
     });
     const data = await res.json();
     setSubmitting(false);
@@ -90,6 +90,16 @@ export default function EventSignup() {
         <form onSubmit={handleSubmit} className={styles.signupForm}>
           <section className={styles.formSection}>
             <h2>Your details</h2>
+            <label className={styles.fieldLabel}>Full name *
+              <input
+                type="text"
+                required
+                value={form.name}
+                onChange={e => setField('name', e.target.value)}
+                placeholder="Jane Smith"
+                className={styles.fieldInput}
+              />
+            </label>
             <label className={styles.fieldLabel}>Email address *
               <input
                 type="email"

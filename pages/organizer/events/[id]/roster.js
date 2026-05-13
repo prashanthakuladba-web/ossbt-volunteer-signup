@@ -31,7 +31,7 @@ function Roster() {
         const slotIds = slotList.map(s => s.id);
         const { data: sg } = await supabase
           .from('signups')
-          .select('id, slot_id, email, phone, signed_up_at, status, checked_in_at, checked_out_at, total_minutes')
+          .select('id, slot_id, name, email, phone, signed_up_at, status, checked_in_at, checked_out_at, total_minutes')
           .in('slot_id', slotIds)
           .eq('status', 'confirmed');
         const bySlot = {};
@@ -74,12 +74,13 @@ function Roster() {
   }
 
   function exportCSV() {
-    const rows = [['Slot', 'Time', 'Email', 'Phone', 'Checked In', 'Checked Out', 'Total Time']];
+    const rows = [['Slot', 'Time', 'Name', 'Email', 'Phone', 'Checked In', 'Checked Out', 'Total Time']];
     slots.forEach(slot => {
       (signupsBySlot[slot.id] || []).forEach(sg => {
         rows.push([
           slot.title,
           formatSlotTime(slot.start_time, slot.end_time),
+          sg.name || '',
           sg.email || '',
           sg.phone || '',
           formatTime(sg.checked_in_at),
@@ -134,12 +135,13 @@ function Roster() {
                 ) : (
                   <table className={styles.table}>
                     <thead>
-                      <tr><th>#</th><th>Email</th><th>Phone</th><th>Checked In</th><th>Checked Out</th><th>Total Time</th><th></th></tr>
+                      <tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Checked In</th><th>Checked Out</th><th>Total Time</th><th></th></tr>
                     </thead>
                     <tbody>
                       {sgs.map((sg, i) => (
                         <tr key={sg.id}>
                           <td>{i + 1}</td>
+                          <td>{sg.name || '—'}</td>
                           <td>{sg.email || '—'}</td>
                           <td>{sg.phone || '—'}</td>
                           <td>{formatTime(sg.checked_in_at)}</td>
