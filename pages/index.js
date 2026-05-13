@@ -32,6 +32,7 @@ export default function Home() {
   return (
     <Layout>
       <div className={styles.hero}>
+        <Image src="/ossbt-logo.png" alt="OSSBT logo" width={3520} height={3520} className={styles.logo} priority />
         <h1>Find volunteer opportunities at our OSSBT</h1>
         <p>Browse upcoming events and sign up for a slot that works for you.</p>
         <input
@@ -54,9 +55,7 @@ export default function Home() {
               <EventCard key={event.id} event={event} />
             ))}
           </div>
-          <div className={styles.centerLogo}>
-            <Image src="/watermark.png" alt="OSSBT logo" width={300} height={300} style={{ width: '100%', height: 'auto' }} />
-          </div>
+          <div className={styles.centerLogo} />
           <div className={styles.sideCards}>
             {filtered.filter((_, i) => i % 2 === 1).map(event => (
               <EventCard key={event.id} event={event} />
