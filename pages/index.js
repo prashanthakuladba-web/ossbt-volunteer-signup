@@ -49,10 +49,20 @@ export default function Home() {
       ) : filtered.length === 0 ? (
         <p className={styles.status}>No upcoming events found.</p>
       ) : (
-        <div className={styles.grid}>
-          {filtered.map(event => (
-            <EventCard key={event.id} event={event} />
-          ))}
+        <div className={styles.threeCol}>
+          <div className={styles.sideCards}>
+            {filtered.filter((_, i) => i % 2 === 0).map(event => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
+          <div className={styles.centerLogo}>
+            <Image src="/watermark.png" alt="OSSBT logo" width={300} height={300} style={{ width: '100%', height: 'auto' }} />
+          </div>
+          <div className={styles.sideCards}>
+            {filtered.filter((_, i) => i % 2 === 1).map(event => (
+              <EventCard key={event.id} event={event} />
+            ))}
+          </div>
         </div>
       )}
     </Layout>
