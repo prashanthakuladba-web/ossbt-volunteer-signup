@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Layout from '../components/Layout';
 import EventCard from '../components/EventCard';
 import { supabase } from '../lib/supabase';
@@ -31,7 +32,8 @@ export default function Home() {
   return (
     <Layout>
       <div className={styles.hero}>
-        <h1>Find volunteer opportunities</h1>
+        <Image src="/ossbt-logo.png" alt="OSSBT logo" width={160} height={160} className={styles.logo} priority />
+        <h1>Find volunteer opportunities at our OSSBT</h1>
         <p>Browse upcoming events and sign up for a slot that works for you.</p>
         <input
           type="text"
