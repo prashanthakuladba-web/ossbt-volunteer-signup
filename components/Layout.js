@@ -29,7 +29,7 @@ export default function Layout({ children }) {
   return (
     <div className={styles.wrapper}>
       <nav className={styles.nav}>
-        <Link href="/" className={styles.brand}>VolunteerSignup</Link>
+        <Link href="/" className={styles.brand}>OSSBT Volunteers</Link>
         <div className={styles.navLinks}>
           {profile ? (
             <>
@@ -45,7 +45,7 @@ export default function Layout({ children }) {
       </nav>
       <main className={styles.main}>{children}</main>
       <footer className={styles.footer}>
-        <p>VolunteerSignup &copy; {new Date().getFullYear()}</p>
+        <p>OSSBT Volunteers &copy; {new Date().getFullYear()}</p>
       </footer>
     </div>
   );
