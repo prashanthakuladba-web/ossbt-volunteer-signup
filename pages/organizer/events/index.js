@@ -24,7 +24,6 @@ function OrganizerEvents() {
       const { data } = await supabase
         .from('events')
         .select('*, slots(id)')
-        .eq('organizer_id', session.user.id)
         .order('event_date', { ascending: true });
       setEvents(data || []);
       setLoading(false);
@@ -52,7 +51,7 @@ function OrganizerEvents() {
     <Layout>
       <div className={styles.container}>
         <div className={styles.topBar}>
-          <h1>My events</h1>
+          <h1>All events</h1>
           <Link href="/organizer/events/new" className={styles.createBtn}>+ Create event</Link>
         </div>
 
