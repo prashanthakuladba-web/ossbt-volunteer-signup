@@ -32,7 +32,7 @@ export default function Home() {
   return (
     <Layout>
       <div className={styles.hero}>
-        <Image src="/ossbt-logo.png" alt="OSSBT logo" width={3200} height={3200} className={styles.logo} priority />
+        <Image src="/ossbt-logo.png" alt="OSSBT logo" width={176} height={176} className={styles.logo} priority />
         <h1>Find volunteer opportunities at our OSSBT</h1>
         <p>Browse upcoming events and sign up for a slot that works for you.</p>
         <input
