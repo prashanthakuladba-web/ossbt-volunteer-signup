@@ -96,7 +96,7 @@ export default function EventSignup() {
                 required
                 value={form.name}
                 onChange={e => setField('name', e.target.value)}
-                placeholder="Jane Smith"
+                placeholder="Full name"
                 className={styles.fieldInput}
               />
             </label>
