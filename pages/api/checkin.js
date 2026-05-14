@@ -89,7 +89,7 @@ export default async function handler(req, res) {
   const certEnabled = !certSetting || certSetting.value === 'true';
 
   // Send certificate email only if volunteer logged at least 30 minutes
-  if (certEnabled && process.env.RESEND_API_KEY && signup.email && signup.name && total_minutes >= 30) {
+  if (certEnabled && process.env.RESEND_API_KEY && signup.email && signup.name) {
     const date = checkoutTime.toLocaleDateString('en-US', {
       month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York',
     });
