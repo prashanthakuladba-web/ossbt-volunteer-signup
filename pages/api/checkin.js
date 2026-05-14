@@ -29,7 +29,7 @@ export default async function handler(req, res) {
   } else {
     if (!email) return res.status(400).json({ error: 'Email is required.' });
 
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
     const { data: signups } = await supabase
       .from('signups')
       .select('*, slots!inner(*, events!inner(*))')
