@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { formatSlotTime } from '../../lib/helpers';
+import { generateCertificate } from '../../lib/certificate';
+import { sendCertificate } from '../../lib/email';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
@@ -77,6 +79,19 @@ export default async function handler(req, res) {
     .from('signups')
     .update({ checked_out_at: checkoutTime.toISOString(), total_minutes })
     .eq('id', signup.id);
+
+  // Send certificate email
+  if (process.env.RESEND_API_KEY && signup.email && signup.name) {
+    const date = checkoutTime.toLocaleDateString('en-US', {
+      month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York',
+    });
+    try {
+      const certBuffer = await generateCertificate({ name: signup.name, hours: hours, date });
+      await sendCertificate(signup.email, { name: signup.name, hoursDisplay: hours_display, certBuffer, cc: 'volunteerscoordination@omsrisaibalajitemple.org' });
+    } catch (err) {
+      console.error('Certificate generation failed:', err);
+    }
+  }
 
   return res.status(200).json({
     action: 'checkout',

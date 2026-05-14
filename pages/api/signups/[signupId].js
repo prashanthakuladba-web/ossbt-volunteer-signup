@@ -6,6 +6,7 @@ export default async function handler(req, res) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: 'Not authenticated' });
 
+  // Verify organizer auth with anon client
   const supabaseUser = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -26,10 +27,15 @@ export default async function handler(req, res) {
 
   const { signupId } = req.query;
 
-  // RLS UPDATE policy verifies this signup belongs to the organizer's event
-  const { error } = await supabaseUser
+  // Hard delete using service role key so slot capacity is freed up immediately
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+
+  const { error } = await supabaseAdmin
     .from('signups')
-    .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
+    .delete()
     .eq('id', signupId);
 
   if (error) return res.status(500).json({ error: error.message });
