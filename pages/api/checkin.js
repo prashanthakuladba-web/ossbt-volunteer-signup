@@ -80,8 +80,16 @@ export default async function handler(req, res) {
     .update({ checked_out_at: checkoutTime.toISOString(), total_minutes })
     .eq('id', signup.id);
 
+  // Check if certificate sending is enabled via settings table
+  const { data: certSetting } = await supabase
+    .from('settings')
+    .select('value')
+    .eq('key', 'certificate_enabled')
+    .single();
+  const certEnabled = !certSetting || certSetting.value === 'true';
+
   // Send certificate email only if volunteer logged at least 30 minutes
-  if (process.env.RESEND_API_KEY && signup.email && signup.name && total_minutes >= 30) {
+  if (certEnabled && process.env.RESEND_API_KEY && signup.email && signup.name && total_minutes >= 30) {
     const date = checkoutTime.toLocaleDateString('en-US', {
       month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York',
     });

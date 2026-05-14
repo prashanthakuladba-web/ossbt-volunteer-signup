@@ -15,6 +15,8 @@ function OrganizerEvents() {
   const [loading, setLoading] = useState(true);
   const [copiedId, setCopiedId] = useState(null);
   const [showQR, setShowQR] = useState(false);
+  const [certEnabled, setCertEnabled] = useState(true);
+  const [savingCert, setSavingCert] = useState(false);
 
   function copyLink(eventId) {
     const link = `${window.location.origin}/events/${eventId}`;
@@ -26,15 +28,24 @@ function OrganizerEvents() {
   useEffect(() => {
     async function load() {
       const { data: { session } } = await supabase.auth.getSession();
-      const { data } = await supabase
-        .from('events')
-        .select('*, slots(id)')
-        .order('event_date', { ascending: true });
-      setEvents(data || []);
+      const [{ data: eventsData }, { data: settingData }] = await Promise.all([
+        supabase.from('events').select('*, slots(id)').order('event_date', { ascending: true }),
+        supabase.from('settings').select('value').eq('key', 'certificate_enabled').single(),
+      ]);
+      setEvents(eventsData || []);
+      if (settingData) setCertEnabled(settingData.value === 'true');
       setLoading(false);
     }
     load();
   }, []);
+
+  async function toggleCertEnabled() {
+    const next = !certEnabled;
+    setSavingCert(true);
+    await supabase.from('settings').update({ value: String(next) }).eq('key', 'certificate_enabled');
+    setCertEnabled(next);
+    setSavingCert(false);
+  }
 
   async function togglePublish(event) {
     await supabase
@@ -75,6 +86,17 @@ function OrganizerEvents() {
             <button onClick={() => window.print()} className={styles.printBtn}>Print QR Code</button>
           </div>
         )}
+
+        <div className={styles.settingRow}>
+          <span className={styles.settingLabel}>Send Certificate of Appreciation on checkout</span>
+          <button
+            onClick={toggleCertEnabled}
+            disabled={savingCert}
+            className={certEnabled ? styles.toggleOn : styles.toggleOff}
+          >
+            {savingCert ? 'Saving…' : certEnabled ? 'Enabled' : 'Disabled'}
+          </button>
+        </div>
 
         {loading ? (
           <p>Loading…</p>
