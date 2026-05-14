@@ -16,7 +16,7 @@ export default function Home() {
         .from('events')
         .select('*')
         .eq('is_published', true)
-        .gte('event_date', new Date().toISOString().split('T')[0])
+        .gte('event_date', new Date().toLocaleDateString('en-CA'))
         .order('event_date', { ascending: true });
       setEvents(data || []);
       setLoading(false);
