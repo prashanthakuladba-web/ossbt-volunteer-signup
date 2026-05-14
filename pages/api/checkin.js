@@ -96,6 +96,7 @@ export default async function handler(req, res) {
     try {
       const certBuffer = await generateCertificate({ name: signup.name, hours: hours, date });
       await sendCertificate(signup.email, { name: signup.name, hoursDisplay: hours_display, certBuffer, cc: 'volunteerscoordination@omsrisaibalajitemple.org' });
+      await supabase.from('signups').update({ certificate_sent_at: new Date().toISOString() }).eq('id', signup.id);
     } catch (err) {
       console.error('Certificate generation failed:', err);
     }

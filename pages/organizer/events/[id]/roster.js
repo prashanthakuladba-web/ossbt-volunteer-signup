@@ -32,7 +32,7 @@ function Roster() {
         const slotIds = slotList.map(s => s.id);
         const { data: sg } = await supabase
           .from('signups')
-          .select('id, slot_id, name, email, phone, signed_up_at, status, checked_in_at, checked_out_at, total_minutes')
+          .select('id, slot_id, name, email, phone, signed_up_at, status, checked_in_at, checked_out_at, total_minutes, certificate_sent_at')
           .in('slot_id', slotIds)
           .eq('status', 'confirmed');
         const bySlot = {};
@@ -95,7 +95,7 @@ function Roster() {
   }
 
   function exportCSV() {
-    const rows = [['Slot', 'Time', 'Name', 'Email', 'Phone', 'Checked In', 'Checked Out', 'Total Time']];
+    const rows = [['Slot', 'Time', 'Name', 'Email', 'Phone', 'Checked In', 'Checked Out', 'Total Time', 'Certificate Sent']];
     slots.forEach(slot => {
       (signupsBySlot[slot.id] || []).forEach(sg => {
         rows.push([
@@ -107,6 +107,7 @@ function Roster() {
           formatTime(sg.checked_in_at),
           formatTime(sg.checked_out_at),
           formatTotalTime(sg.total_minutes),
+          sg.certificate_sent_at ? formatTime(sg.certificate_sent_at) : 'No',
         ]);
       });
     });
@@ -156,7 +157,7 @@ function Roster() {
                 ) : (
                   <table className={styles.table}>
                     <thead>
-                      <tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Checked In</th><th>Checked Out</th><th>Total Time</th><th></th></tr>
+                      <tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Checked In</th><th>Checked Out</th><th>Total Time</th><th>Cert</th><th></th></tr>
                     </thead>
                     <tbody>
                       {sgs.map((sg, i) => (
@@ -168,6 +169,7 @@ function Roster() {
                           <td>{formatTime(sg.checked_in_at)}</td>
                           <td>{formatTime(sg.checked_out_at)}</td>
                           <td>{formatTotalTime(sg.total_minutes)}</td>
+                          <td>{sg.certificate_sent_at ? '✓' : '—'}</td>
                           <td style={{ display: 'flex', gap: '0.4rem' }}>
                             {sg.checked_in_at && !sg.checked_out_at && (
                               <button
