@@ -1,0 +1,36 @@
+.container { max-width: 520px; margin: 4rem auto; padding: 0 1.5rem; }
+
+.msg { text-align: center; color: #888; }
+
+.card {
+  background: #fff;
+  border: 1px solid #e8ecf4;
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.title { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.5rem; }
+.sub { color: #555; font-size: 0.95rem; margin-bottom: 1rem; }
+
+.table { margin: 1.2rem auto; text-align: left; border-collapse: collapse; }
+.table td { padding: 0.4rem 0.75rem; font-size: 0.9rem; }
+.table td:first-child { color: #888; white-space: nowrap; }
+
+.warning { font-size: 0.85rem; color: #b45309; margin-bottom: 1.25rem; }
+
+.cancelBtn {
+  padding: 0.65rem 1.5rem;
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.cancelBtn:hover:not(:disabled) { background: #b91c1c; }
+.cancelBtn:disabled { opacity: 0.6; cursor: default; }
+
+.check { font-size: 2.5rem; color: #16a34a; margin-bottom: 0.5rem; }
+.errorMsg { color: #dc2626; font-size: 0.95rem; }

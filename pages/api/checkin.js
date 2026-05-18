@@ -23,7 +23,6 @@ export default async function handler(req, res) {
       .eq('id', signupId)
       .single();
     if (!data) return res.status(404).json({ error: 'Signup not found.' });
-    if (!data.checked_in_at) return res.status(400).json({ error: 'Volunteer has not checked in yet.' });
     if (data.checked_out_at) return res.status(409).json({ error: 'Volunteer has already checked out.' });
     signup = data;
   } else {

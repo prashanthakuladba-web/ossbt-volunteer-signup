@@ -84,8 +84,9 @@ export default async function handler(req, res) {
 
   if (process.env.RESEND_API_KEY) {
     const organizerEmail = slot.events.profiles?.email;
+    const cancelUrl = `https://ossbt-volunteers.org/cancel?id=${signup.id}`;
     await Promise.allSettled([
-      sendVolunteerConfirmation(email.toLowerCase().trim(), emailPayload),
+      sendVolunteerConfirmation(email.toLowerCase().trim(), { ...emailPayload, cancelUrl }),
       organizerEmail
         ? sendOrganizerNotification(organizerEmail, {
             ...emailPayload,

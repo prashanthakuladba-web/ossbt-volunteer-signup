@@ -16,6 +16,7 @@ function Roster() {
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
   const [checkingOutId, setCheckingOutId] = useState(null);
+  const [checkingInId, setCheckingInId] = useState(null);
 
   useEffect(() => {
     if (!id) return;
@@ -44,6 +45,24 @@ function Roster() {
     }
     load();
   }, [id]);
+
+  async function handleManualCheckin(slotId, signupId) {
+    setCheckingInId(signupId);
+    const res = await fetch('/api/checkin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ signupId }),
+    });
+    const data = await res.json();
+    setCheckingInId(null);
+    if (!res.ok) { alert(data.error || 'Check-in failed.'); return; }
+    setSignupsBySlot(prev => ({
+      ...prev,
+      [slotId]: prev[slotId].map(sg =>
+        sg.id === signupId ? { ...sg, checked_in_at: new Date().toISOString() } : sg
+      ),
+    }));
+  }
 
   async function handleManualCheckout(slotId, signupId) {
     setCheckingOutId(signupId);
@@ -171,6 +190,15 @@ function Roster() {
                           <td>{formatTotalTime(sg.total_minutes)}</td>
                           <td>{sg.certificate_sent_at ? '✓' : '—'}</td>
                           <td style={{ display: 'flex', gap: '0.4rem' }}>
+                            {!sg.checked_in_at && (
+                              <button
+                                className={styles.checkinBtn}
+                                onClick={() => handleManualCheckin(slot.id, sg.id)}
+                                disabled={checkingInId === sg.id}
+                              >
+                                {checkingInId === sg.id ? '…' : 'Check in'}
+                              </button>
+                            )}
                             {sg.checked_in_at && !sg.checked_out_at && (
                               <button
                                 className={styles.checkoutBtn}
