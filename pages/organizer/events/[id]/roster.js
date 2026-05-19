@@ -17,6 +17,7 @@ function Roster() {
   const [deletingId, setDeletingId] = useState(null);
   const [checkingOutId, setCheckingOutId] = useState(null);
   const [checkingInId, setCheckingInId] = useState(null);
+  const [approvingCertId, setApprovingCertId] = useState(null);
 
   useEffect(() => {
     if (!id) return;
@@ -33,7 +34,7 @@ function Roster() {
         const slotIds = slotList.map(s => s.id);
         const { data: sg } = await supabase
           .from('signups')
-          .select('id, slot_id, name, email, phone, signed_up_at, status, checked_in_at, checked_out_at, total_minutes, certificate_sent_at')
+          .select('id, slot_id, name, email, phone, signed_up_at, status, checked_in_at, checked_out_at, total_minutes, certificate_sent_at, certificate_pending')
           .in('slot_id', slotIds)
           .eq('status', 'confirmed');
         const bySlot = {};
@@ -60,6 +61,27 @@ function Roster() {
       ...prev,
       [slotId]: prev[slotId].map(sg =>
         sg.id === signupId ? { ...sg, checked_in_at: new Date().toISOString() } : sg
+      ),
+    }));
+  }
+
+  async function handleApproveCert(slotId, signupId) {
+    setApprovingCertId(signupId);
+    const { data: { session } } = await supabase.auth.getSession();
+    const res = await fetch('/api/certificate/approve', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+      body: JSON.stringify({ signupId }),
+    });
+    const data = await res.json();
+    setApprovingCertId(null);
+    if (!res.ok) { alert(data.error || 'Approval failed.'); return; }
+    setSignupsBySlot(prev => ({
+      ...prev,
+      [slotId]: prev[slotId].map(sg =>
+        sg.id === signupId
+          ? { ...sg, certificate_pending: false, certificate_sent_at: new Date().toISOString() }
+          : sg
       ),
     }));
   }
@@ -188,7 +210,17 @@ function Roster() {
                           <td>{formatTime(sg.checked_in_at)}</td>
                           <td>{formatTime(sg.checked_out_at)}</td>
                           <td>{formatTotalTime(sg.total_minutes)}</td>
-                          <td>{sg.certificate_sent_at ? '✓' : '—'}</td>
+                          <td>
+                            {sg.certificate_sent_at ? '✓' : sg.certificate_pending ? (
+                              <button
+                                className={styles.approveCertBtn}
+                                onClick={() => handleApproveCert(slot.id, sg.id)}
+                                disabled={approvingCertId === sg.id}
+                              >
+                                {approvingCertId === sg.id ? '…' : 'Approve'}
+                              </button>
+                            ) : '—'}
+                          </td>
                           <td style={{ display: 'flex', gap: '0.4rem' }}>
                             {!sg.checked_in_at && (
                               <button

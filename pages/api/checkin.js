@@ -87,17 +87,21 @@ export default async function handler(req, res) {
     .single();
   const certEnabled = !certSetting || certSetting.value === 'true';
 
-  // Send certificate email only if volunteer logged at least 30 minutes
   if (certEnabled && process.env.RESEND_API_KEY && signup.email && signup.name) {
-    const date = checkoutTime.toLocaleDateString('en-US', {
-      month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York',
-    });
-    try {
-      const certBuffer = await generateCertificate({ name: signup.name, hours: hours, date });
-      await sendCertificate(signup.email, { name: signup.name, hoursDisplay: hours_display, certBuffer, cc: 'volunteerscoordination@omsrisaibalajitemple.org' });
-      await supabase.from('signups').update({ certificate_sent_at: new Date().toISOString() }).eq('id', signup.id);
-    } catch (err) {
-      console.error('Certificate generation failed:', err);
+    if (total_minutes > 240) {
+      // > 4 hours: requires organizer approval before sending
+      await supabase.from('signups').update({ certificate_pending: true }).eq('id', signup.id);
+    } else {
+      const date = checkoutTime.toLocaleDateString('en-US', {
+        month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York',
+      });
+      try {
+        const certBuffer = await generateCertificate({ name: signup.name, hours: hours, date });
+        await sendCertificate(signup.email, { name: signup.name, hoursDisplay: hours_display, certBuffer, cc: 'volunteerscoordination@omsrisaibalajitemple.org' });
+        await supabase.from('signups').update({ certificate_sent_at: new Date().toISOString() }).eq('id', signup.id);
+      } catch (err) {
+        console.error('Certificate generation failed:', err);
+      }
     }
   }
 
