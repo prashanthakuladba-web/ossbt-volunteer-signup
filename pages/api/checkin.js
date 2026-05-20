@@ -88,7 +88,7 @@ export default async function handler(req, res) {
   const certEnabled = !certSetting || certSetting.value === 'true';
 
   if (certEnabled && process.env.RESEND_API_KEY && signup.email && signup.name) {
-    if (total_minutes > 240) {
+    if (total_minutes >= 240) {
       // > 4 hours: requires organizer approval before sending
       await supabase.from('signups').update({ certificate_pending: true }).eq('id', signup.id);
     } else {
